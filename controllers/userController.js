@@ -49,3 +49,52 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+   // Remove an existing user
+   async removeUser(req, res) {
+    try {
+      const user = await User.findOneAndRemove({ _id: req.params.userId });
+      // Check if user exists
+      if (!user) {
+        res.status(404).json({ message: "No user with that ID found!" });
+      } else {
+        // Delete thoughts attached to user
+        await Thought.deleteMany({ _id: { $in: user.thoughts } });
+        res.json({ message: "User and thoughts deleted" });
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // Add a friend to user
+  async addFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true, runValidators: true }
+      );
+      // Check if user exists
+      !user
+        ? res.status(404).json({ message: "No user with that ID found!" })
+        : res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // Remove friend from user
+  async removeFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true, runValidators: true }
+      );
+      // Check if user is in the database
+      !user
+        ? res.status(404).json({ message: "No user with that ID found!" })
+        : res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+};
