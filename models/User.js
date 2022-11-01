@@ -1,8 +1,9 @@
 const { Schema, model } = require('mongoose');
 const userSchema = require('./Assignment');
+const validator = require("validator");
 
 // Schema to create Student model
-const studentSchema = new Schema(
+const userSchema = new Schema(
   {
    username: {
     type: String,
@@ -14,7 +15,8 @@ const studentSchema = new Schema(
     type: String,
     unique: true,
     required: true,
-    // figure out validation for emails
+    trim: true,
+    validate: [validator.isEmail, "Valid email address required"],
    },
    thoughts: [
     {
@@ -38,8 +40,8 @@ const studentSchema = new Schema(
 
 userSchema.virtual('friendCount').get(function() {
   return this.friends.length;
-})
+});
 
-const User = model('student', userSchema);
+const User = model('user', userSchema);
 
 module.exports = User;
