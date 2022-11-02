@@ -11,7 +11,9 @@ To install this functionality to the Social Network API, run npm run start in th
 
 ## Usage
 
-Video Link: 
+Video Link for User Flow: 
+
+https://drive.google.com/file/d/1WalY-fy_ZU7Rj4ia7RshRq8TSxgKECP6/view
 
 ## Credits
 
